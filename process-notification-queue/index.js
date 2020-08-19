@@ -23,6 +23,6 @@ module.exports = async function (context, notificationQueueItem) {
         })
         .catch((err) => {
             context.log.error(`Error: ${JSON.stringify(err, null, 4)}`);
-            return err;
+            throw err;
         });
 };
