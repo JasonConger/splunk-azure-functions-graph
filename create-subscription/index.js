@@ -6,13 +6,16 @@ const graph = require('../helpers/graph');
 module.exports = async function (context, req) {
     context.log('create-subscription function triggered');
 
+    // Currently only supporting call records
+    let resource = "/communications/callRecords";
+
     // Create a Date 2 days in the future for the exipiration time.
     let expirationDateTime = new Date();
     expirationDateTime.setDate(expirationDateTime.getDate() + 2);
     let subscriptionBody = {
         "changeType":"created, updated",
         "notificationUrl": req.originalUrl.replace("create-subscription", "subscription-webhook"),
-        "resource": "/communications/callRecords",
+        "resource": resource,
         "expirationDateTime": expirationDateTime.toISOString()
     }
 
