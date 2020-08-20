@@ -53,12 +53,22 @@ const deleteSubscription = async function(subscriptionId) {
 
 const getResource = async function(resource) {
 
-    return await graphClient.api(resource)
+    if (resource.startsWith("communications/callRecords")) {
+        // We need to expand sessions and segments for call records
+        return await graphClient.api(resource)
+            .expand("sessions($expand=segments)")
+            .get()
+            .catch((err) => {
+                throw err;
+            });
+
+    } else {
+        return await graphClient.api(resource)
         .get()
         .catch((err) => {
             throw err;
         });
-
+    }
 }
 
 const getResourceTime = function (resource) {
