@@ -61,6 +61,9 @@ Run the following Splunk query
 
 (optional) Download and install the [Microsoft 365 App for Splunk](https://splunkbase.splunk.com/app/3786/)
 
+## Support
+This software is released as-is. Splunk provides no warranty and no support on this software. If you have any issues with the software, please file an issue on the repository.
+
 ## How it works
 1. When the `create-subscription` function successfully creates a Microsoft Graph subscription, the subscription ID and expiration date is written to a storage blob.
 1. After a subscribed event occurs, a notification is sent to the `subscription-webhook`.  The `subscription-webhook` commits the data to a notification queue to keep things speedy.
