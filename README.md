@@ -62,18 +62,9 @@ Run the following Splunk query
 (optional) Download and install the [Microsoft 365 App for Splunk](https://splunkbase.splunk.com/app/3786/)
 
 ## How it works
-1. When the `create-subscription` function successfully creates Microsoft Graph subscription, the subscription ID and expiration date is written to a storage blob.
+1. When the `create-subscription` function successfully creates a Microsoft Graph subscription, the subscription ID and expiration date is written to a storage blob.
+1. After a subscribed event occurs, a notification is sent to the `subscription-webhook`.  The `subscription-webhook` commits the data to a notification queue to keep things speedy.
+1. When an event arrives on the notification queue, the `process-notification-queue` function is triggered.  This function retrieves the data from Microsoft Graph and forwards the data to Splunk.
+1. Since subscriptions have a short lifespan, the `update-subscriptions` function periodically reads the blobs and will update subscriptions if they are about to expire.
 
-[![subscription-webhook](docs/images/function-create-subscription.png)](docs/images/function-create-subscription.png)
-
-2. After a subscribed event occurs, a notification is sent to the `subscription-webhook`.  The `subscription-webhook` commits the data to a notification queue to keep things speedy.
-
-[![subscription-webhook](docs/images/function-subscription-webhook.png)](docs/images/function-subscription-webhook.png)
-
-3. When an event arrives on the notification queue, the `process-notification-queue` function is triggered.  This function retrieves the data from Microsoft Graph and forwards the data to Splunk.
-
-[![subscription-webhook](docs/images/function-process-notification-queue.png)](docs/images/function-process-notification-queue.png)
-
-4. Since subscriptions have a short lifespan, the `update-subscriptions` function periodically reads the blobs and will update subscriptions if they are about to expire.
-
-[![subscription-webhook](docs/images/function-update-subscriptions.png)](docs/images/function-update-subscriptions.png)
+[![subscription-webhook](docs/images/Azure-Functions-for-Graph.svg)](docs/images/Azure-Functions-for-Graph.svg)
